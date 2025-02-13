@@ -1,11 +1,13 @@
 import { LandingPage } from "@/components/page"
-// import { Navbar } from "@/components/navbar"
+import Sidebar from "@/components/sidebar"
+import { ContentBar } from "@/components/contentbar"
 
 export default function finalPage() {
   return (
     <div>
-      {/* <Navbar/> */}
-      <LandingPage/>
+      <LandingPage/> 
+      <Sidebar/>
+      <ContentBar />
     </div>
   )
 }
