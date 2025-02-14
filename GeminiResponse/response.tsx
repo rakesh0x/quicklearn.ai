@@ -4,12 +4,14 @@ import axios from "axios";
 import { TeachingPromptComponent } from "./SystemPrompt";
 import { useState } from "react";
 
-const API_KEY = process.env.API_KEY;
-const GEMINI_API_URL = process.env.GEMINI_API_URL;
 
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const GEMINI_API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;
 
-
-interface  
+// Define types for API response and request
+interface GeminiResponse {
+    data: any;
+}
 
 interface GeminiRequest {
     contents: {
@@ -19,7 +21,7 @@ interface GeminiRequest {
 }
 
 export function GeminiResponse() {
-    const [systemPrompt, setSystemPrompt] = useState<string>("");
+    const [systemPrompt, setSystemPrompt] = useState<string>("")
 
     const handlePromptChange = (prompt: string) => {
         setSystemPrompt(prompt);
@@ -27,19 +29,16 @@ export function GeminiResponse() {
 
     const handleGeminiRequest = async (inputData: string): Promise<GeminiResponse> => {
         try {
-            const response = await axios({
-                url: GEMINI_API_URL,
-                method: 'POST',
+            const response = await axios.post<GeminiResponse>(GEMINI_API_URL!, {
+                contents: [
+                    { role: "system", parts: [{ text: systemPrompt }] },
+                    { role: "user", parts: [{ text: inputData }] }
+                ]
+            } as GeminiRequest, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${API_KEY}`
-                },
-                data: {
-                    contents: [
-                        { role: "system", parts: [{ text: systemPrompt }] },
-                        { role: "user", parts: [{ text: inputData }] }
-                    ]
-                } as GeminiRequest
+                }
             });
 
             console.log("Gemini Response:", response.data);
@@ -53,7 +52,7 @@ export function GeminiResponse() {
 
     return (
         <div>
-            <TeachingPromptComponent onPromptChange={handleGeminiRequest} />
+            <TeachingPromptComponent onChange={handlePromptChange} onSubmit={handleGeminiRequest} />
             {/* Add any other UI elements you need */}
         </div>
     );
