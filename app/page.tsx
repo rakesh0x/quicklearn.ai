@@ -1,13 +1,15 @@
-import { LandingPage } from "@/components/page"
-import Sidebar from "@/components/sidebar"
-import { ContentBar } from "@/components/contentbar"
+import { InputBar } from "@/components/contentPage"
+import { Sidebar } from "../components/sidebar"
 
-export default function finalPage() {
+export default function Page() {
   return (
-    <div>
-      <LandingPage/> 
-      <Sidebar/>
-      <ContentBar />
+    <div className="flex h-screen">
+      <Sidebar />
+
+      <main className="flex-1 flex flex-col">
+        <InputBar />
+        {/* Add other page content here */}
+      </main>
     </div>
-  )
+  );
 }

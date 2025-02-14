@@ -1,20 +1,6 @@
 "use client";
-import { Sidebar } from "./sidebar";
-import { ContentBar } from "./contentbar";
 
-export const LandingPage = () => {
-  return (
-    <>
-      
+import { InputBar } from "./contentPage";
+import { Sidebar } from "lucide-react";
 
-      <div className="flex mt-20">
-        <Sidebar/>
-        <ContentBar />
-      </div>
-
-      
-    </>
-  );
-};
-
-
+export { Sidebar, InputBar };

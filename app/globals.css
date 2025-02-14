@@ -5,6 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+
 }
 
 @media (prefers-color-scheme: dark) {
