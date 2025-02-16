@@ -1,6 +1,6 @@
 "use client";
 
-import { InputBar } from "./contentPage";
+import { IntegratedGeminiChat } from "./main";
 import { Sidebar } from "lucide-react";
 
-export { Sidebar, InputBar };
+export { Sidebar, IntegratedGeminiChat };

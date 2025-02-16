@@ -60,7 +60,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
                 ${isOpen ? "justify-start" : "justify-center"}
                 hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-transparent
                 hover:border-l-2 hover:border-purple-400 hover:pl-[10px]
-                group relative pointer-events-auto`} // Ensure clickable
+                group relative pointer-events-auto`} 
             >
               <div className="min-w-[24px] flex items-center justify-center 
                 text-purple-300 group-hover:text-white transition-colors duration-200">
