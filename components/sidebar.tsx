@@ -5,14 +5,14 @@ import { PanelLeftClose, PanelLeft, Calendar, CalendarDays } from "lucide-react"
 import Link from "next/link";
 
 interface SidebarProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Sidebar = ({ children }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
-    console.log("Toggling sidebar"); // Debugging
+    console.log("Toggling sidebar");
     setIsOpen(!isOpen);
   };
 

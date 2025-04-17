@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { SendHorizontal } from "lucide-react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getTeachingPrompt, TeachingStyle } from "@/GeminiResponse/SystemPrompt";
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton"; // Adjust the import path based on your project structure
-
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface GeminiResponse {
   candidates?: { content: string }[];
@@ -18,13 +17,14 @@ export const IntegratedGeminiChat = () => {
   const [inputData, setInputData] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState("");
-  const [teachingStyle, setTeachingStyle] = useState<TeachingStyle>("standard");
+  const [teachingStyle, setTeachingStyle] = useState<TeachingStyle>("short");
 
   const API_KEY = `AIzaSyDKC7W_w8lEdbFN3MlXFj0wLBYU-Jcjgjg`;
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
+  const GEMINI_API_URL =  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
+
 
   const handleGeminiRequest = async (userInput: string): Promise<string> => {
-    try {
+    try { 
       const systemPrompt = getTeachingPrompt(teachingStyle);
 
       const response = await axios.post<GeminiResponse>(
@@ -40,9 +40,10 @@ export const IntegratedGeminiChat = () => {
       );
 
       console.log("Gemini API response:", response.data);
-      return response.data.candidates?.[0]?.content?.parts?.[0]?.text ?? "No response received";
+      return response.data.candidates?.[0]?.content ?? "No response received";
     } catch (error) {
-      console.error("Error fetching Gemini response:", error.response?.data || error.message);
+      const axiosError = error as AxiosError;
+      console.error("Error fetching Gemini response:", JSON.stringify(axiosError.response?.data || axiosError.message, null, 2));
       return "Error processing request";
     }
   };
@@ -50,7 +51,7 @@ export const IntegratedGeminiChat = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputData.trim()) return;
-
+    
     setIsLoading(true);
     setResponse("");
 
@@ -74,17 +75,14 @@ export const IntegratedGeminiChat = () => {
         </span>
       </div>
 
-      {/* Header */}
       <div className="text-3xl md:text-5xl font-bold text-center mt-12 px-4 animate-fade-in">
         <span className="bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
           How can I help you?
         </span>
       </div>
 
-      {/* Chat Interface */}
       <div className="flex-grow flex items-center justify-center px-4 pb-8 md:pb-16 -mt-20">
         <form onSubmit={handleSubmit} className="w-full max-w-[800px] mx-auto">
-          {/* Teaching Style Dropdown */}
           <div className="mb-6">
             <label htmlFor="teaching-style" className="block text-sm font-medium text-gray-400 mb-2">
               Teaching Style
@@ -103,7 +101,6 @@ export const IntegratedGeminiChat = () => {
             </select>
           </div>
 
-          {/* Input Field */}
           <div className="relative rounded-lg shadow-lg">
             <div className="flex items-center">
               <input
@@ -126,7 +123,6 @@ export const IntegratedGeminiChat = () => {
         </form>
       </div>
 
-      {/* AI Response */}
       <div className="w-full max-w-[800px] mx-auto text-white px-6 pb-12 flex-grow relative">
         {isLoading ? (
           <div className="space-y-4">
@@ -144,9 +140,9 @@ export const IntegratedGeminiChat = () => {
                 transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
               />
               <h2 className="text-lg font-semibold text-purple-400 mb-4">AI Response:</h2>
-              <div className="text-white leading-relaxed whitespace-pre-wrap">
-                {response.split("\n").map((line, index) => (
-                  <p key={index} className="mb-4">{line} </p>
+              <div className="text-white loading-relaxed whitespace-pre-wrap">
+                {response?.parts?.[0]?.text?.split("\n").map((line: string, index:number) => (
+                <p key={index} className="mb-4">{line}</p>
                 ))}
               </div>
             </div>
