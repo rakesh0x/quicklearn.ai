@@ -1,5 +1,11 @@
-export type TeachingStyle = "standard" | "short" | "interactive" | "advanced" | "storytelling";
-
+export enum TeachingStyle {
+    Standard = "standard",
+    Short = "short",
+    Interactive = "interactive",
+    Advanced = "advanced",
+    Storytelling = "storytelling"
+  }
+  
 
 export const TEACHING_PROMPTS: Record<TeachingStyle, string> = {
     standard: `

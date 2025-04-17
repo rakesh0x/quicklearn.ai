@@ -17,11 +17,10 @@ export const IntegratedGeminiChat = () => {
   const [inputData, setInputData] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState("");
-  const [teachingStyle, setTeachingStyle] = useState<TeachingStyle>("short");
+  const [teachingStyle, setTeachingStyle] = useState("short");
 
   const API_KEY = `AIzaSyDKC7W_w8lEdbFN3MlXFj0wLBYU-Jcjgjg`;
   const GEMINI_API_URL =  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
-
 
   const handleGeminiRequest = async (userInput: string): Promise<string> => {
     try { 
@@ -89,15 +88,18 @@ export const IntegratedGeminiChat = () => {
             </label>
             <select
               id="teaching-style"
-              className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 outline-none transition-all"
+              className="relative z-10 w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 outline-none transition-all"
               value={teachingStyle}
-              onChange={(e) => setTeachingStyle(e.target.value as TeachingStyle)}
+              onChange={(e) =>  {
+                const Selected = e.target.value as keyof typeof TeachingStyle;
+                setTeachingStyle(TeachingStyle[Selected])
+              }}
             >
-              <option value="standard">Standard</option>
-              <option value="short">Short</option>
-              <option value="interactive">Interactive</option>
-              <option value="advanced">Advanced</option>
-              <option value="storytelling">Storytelling</option>
+              <option value={TeachingStyle.Standard}>Standard</option>
+              <option value={TeachingStyle.Short}>Short</option>
+              <option value={TeachingStyle.Interactive}>Interactive</option>
+              <option value={TeachingStyle.Advanced}>Advanced</option>
+              <option value={TeachingStyle.Storytelling}>Storytelling</option>
             </select>
           </div>
 
@@ -133,12 +135,6 @@ export const IntegratedGeminiChat = () => {
         ) : (
           response && (
             <div className="p-6 bg-gray-800 rounded-lg shadow-md animate-fade-in border border-gray-700 relative overflow-hidden">
-              <motion.div
-                className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-2xl"
-                initial={{ x: -100, y: -100 }}
-                animate={{ x: "100vw", y: "100vh" }}
-                transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
-              />
               <h2 className="text-lg font-semibold text-purple-400 mb-4">AI Response:</h2>
               <div className="text-white loading-relaxed whitespace-pre-wrap">
                 {response?.parts?.[0]?.text?.split("\n").map((line: string, index:number) => (
