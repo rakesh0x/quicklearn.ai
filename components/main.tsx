@@ -8,13 +8,18 @@ import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface GeminiResponse {
-  candidates?: { content: string }[];
-  error: string;
-  parts: unknown;
+  candidates?: {
+    content: {
+      parts: {
+        text: string;
+      }[];
+    };
+  }[];
+  error?: string;
 }
 
-interface teachingPrompt {
-  teachingStyle: string
+interface TeachingPrompt {
+  teachingStyle: string;
 }
 
 export const IntegratedGeminiChat = () => {
@@ -22,24 +27,25 @@ export const IntegratedGeminiChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [teachingStyle, setTeachingStyle] = useState<TeachingStyle>(TeachingStyle.Short);
-  const api_key = `AIzaSyDKC7W_w8lEdbFN3MlXFj0wLBYU-Jcjgjg`  ;
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${api_key}`
-  // const youtube_api_key = `AIzaSyBNYIt-YiohAiMG11qiYfbmu63FPOWrPJw`
-  // const Youtube_Base_url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=lofi&type=video&key=${youtube_api_key}`
+  const api_key = `AIzaSyDKC7W_w8lEdbFN3MlXFj0wLBYU-Jcjgjg`;
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${api_key}`;
 
   const handleGeminiRequest = async (userInput: string): Promise<string> => {
-    try {   
-      const systemPrompt = getTeachingPrompt(teachingStyle)
-      
+    try {
+      const systemPrompt = getTeachingPrompt(teachingStyle);
+
       if (!GEMINI_API_URL) {
         throw new Error("API URL is not defined");
-      } 
+      }
 
       const response = await axios.post<GeminiResponse>(
         GEMINI_API_URL,
         {
           contents: [
-            { role: "user", parts: [{ text: `${systemPrompt}\n\n${userInput}` }] },
+            {
+              role: "user",
+              parts: [{ text: `${systemPrompt}\n\n${userInput}` }],
+            },
           ],
         },
         {
@@ -48,10 +54,20 @@ export const IntegratedGeminiChat = () => {
       );
 
       console.log("Gemini API response:", response.data);
-      return response.data.candidates?.[0]?.content ?? "No response received";
+      return (
+        response.data.candidates?.[0]?.content?.parts?.[0]?.text ??
+        "No response received"
+      );
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.error("Error fetching Gemini response:", JSON.stringify(axiosError.response?.data || axiosError.message, null, 2));
+      console.error(
+        "Error fetching Gemini response:",
+        JSON.stringify(
+          axiosError.response?.data || axiosError.message,
+          null,
+          2
+        )
+      );
       return "Error processing request";
     }
   };
@@ -59,7 +75,7 @@ export const IntegratedGeminiChat = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputData.trim()) return;
-    
+
     setIsLoading(true);
     setResponse("");
 
@@ -92,16 +108,19 @@ export const IntegratedGeminiChat = () => {
       <div className="flex-grow flex items-center justify-center px-4 pb-8 md:pb-16 -mt-20">
         <form onSubmit={handleSubmit} className="w-full max-w-[800px] mx-auto">
           <div className="mb-6">
-            <label htmlFor="teaching-style" className="block text-sm font-medium text-gray-400 mb-2">
+            <label
+              htmlFor="teaching-style"
+              className="block text-sm font-medium text-gray-400 mb-2"
+            >
               Teaching Style
             </label>
             <select
               id="teaching-style"
               className="relative z-10 w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 outline-none transition-all"
               value={teachingStyle}
-              onChange={(e) =>  {
+              onChange={(e) => {
                 const Selected = e.target.value as keyof typeof TeachingStyle;
-                setTeachingStyle(TeachingStyle[Selected])
+                setTeachingStyle(TeachingStyle[Selected]);
               }}
             >
               <option value={TeachingStyle.Standard}>Standard</option>
@@ -144,10 +163,14 @@ export const IntegratedGeminiChat = () => {
         ) : (
           response && (
             <div className="p-6 bg-gray-800 rounded-lg shadow-md animate-fade-in border border-gray-700 relative overflow-hidden">
-              <h2 className="text-lg font-semibold text-purple-400 mb-4">AI Response:</h2>
+              <h2 className="text-lg font-semibold text-purple-400 mb-4">
+                AI Response:
+              </h2>
               <div className="text-white loading-relaxed whitespace-pre-wrap">
-                {response?.parts?.[0]?.text?.split("\n").map((line: string, index:number) => (
-                <p key={index} className="mb-4">{line}</p>
+                {response.split("\n").map((line: string, index: number) => (
+                  <p key={index} className="mb-4">
+                    {line}
+                  </p>
                 ))}
               </div>
             </div>
