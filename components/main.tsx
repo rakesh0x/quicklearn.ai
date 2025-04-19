@@ -146,7 +146,7 @@ export const IntegratedGeminiChat = () => {
             <div className="p-6 bg-gray-800 rounded-lg shadow-md animate-fade-in border border-gray-700 relative overflow-hidden">
               <h2 className="text-lg font-semibold text-purple-400 mb-4">AI Response:</h2>
               <div className="text-white loading-relaxed whitespace-pre-wrap">
-                {response.split("\n").map((line: string, index:number) => (
+                {response?.parts?.[0]?.text?.split("\n").map((line: string, index:number) => (
                 <p key={index} className="mb-4">{line}</p>
                 ))}
               </div>
