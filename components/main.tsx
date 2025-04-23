@@ -5,49 +5,11 @@ import { SendHorizontal, Loader2, BookOpen, Youtube, Sparkles } from "lucide-rea
 import axios, { AxiosError } from "axios";
 import { getTeachingPrompt, TeachingStyle } from "@/components/GeminiResponse/SystemPrompt";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface GeminiResponse {
-  candidates?: {
-    content: {
-      parts: {
-        text: string;
-      }[];
-    };
-  }[];
-  error?: string;
-}
-
-interface YoutubeVideoItem {
-  id: {
-    videoId: string;
-  };
-  snippet: {
-    title: string;
-    thumbnails: {
-      default: {
-        url: string;
-      };
-    };
-  };
-}
-
-interface YoutubeAnalytics {
-  id: string;
-  statistics: {
-    viewCount: string;
-    likeCount: string;
-    favoriteCount: string;
-    commentCount: string;
-  };
-}
-
-interface YoutubeAnalyticsResponse {
-  items: YoutubeAnalytics[];
-}
-
-interface YoutubeVideoResponse {
-  items: YoutubeVideoItem[];
-}
+import { GeminiResponse } from "./interfaces/types";
+import { YoutubeAnalyticsResponse } from "./interfaces/types";
+import { YoutubeVideoResponse } from "./interfaces/types";
+import { YoutubeVideoItem } from "./interfaces/types";
+import { YoutubeAnalytics } from "./interfaces/types";
 
 export const IntegratedGeminiChat = () => {
   const [inputData, setInputData] = useState("");
@@ -71,7 +33,7 @@ export const IntegratedGeminiChat = () => {
     { value: TeachingStyle.Interactive, label: "Interactive", description: "Engaging, question-based teaching" },
     { value: TeachingStyle.Advanced, label: "Advanced", description: "Deep, technical explanations" },
     { value: TeachingStyle.Storytelling, label: "Storytelling", description: "Narrative-based learning" },
-    { value: TeachingStyle.Deepanalysis, label: "Deep Analysis", description: "Comprehensive breakdowns" }
+    { value: TeachingStyle.Deepanalysis, label: "Deep Analysis", description: "Comprehensive breakdowns" }   
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -146,10 +108,8 @@ export const IntegratedGeminiChat = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="flex-grow flex flex-col items-center px-4 pb-12 pt-8">
         <div className="w-full max-w-4xl mx-auto">
-          {/* Hero Section */}
           <section className="text-center mb-10 animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
               Learn Anything with AI
@@ -181,7 +141,6 @@ export const IntegratedGeminiChat = () => {
             </div>
           </section>
 
-          {/* Input Section with Styled Card */}
           <section className="mb-10">
             <div className="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl border border-purple-900/30 p-6">
               <form onSubmit={handleSubmit} className="w-full">
@@ -239,7 +198,6 @@ export const IntegratedGeminiChat = () => {
             </div>
           </section>
 
-          {/* Results Section */}
           <section className="w-full">
             {isLoading ? (
               <div className="space-y-5 bg-slate-800/30 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/30 shadow-lg">
@@ -376,7 +334,7 @@ export const IntegratedGeminiChat = () => {
         </div>
       </main>
 
-      {/* Footer */}
+
       <footer className="bg-slate-900/80 backdrop-blur-md border-t border-slate-800/50 py-6">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -397,7 +355,6 @@ export const IntegratedGeminiChat = () => {
   );
 };
 
-// Helper components and functions
 const EyeIcon = (props: any) => (
   <svg
     {...props}
