@@ -3,8 +3,10 @@ export enum TeachingStyle {
     Short = "short",
     Interactive = "interactive",
     Advanced = "advanced",
-    Storytelling = "storytelling"
+    Storytelling = "storytelling",
+    Deepanalysis = "deepanalysis"
   }
+
   
 
 export const TEACHING_PROMPTS: Record<TeachingStyle, string> = {
@@ -69,8 +71,16 @@ export const TEACHING_PROMPTS: Record<TeachingStyle, string> = {
         6. Including interactive story choices
         7. Ending with reflection questions
     `,
+
+    deepanalysis: `
+        show them those Videos according to these points:
+        1. Videos who have more Number Concurrent views.
+        2. The video should be Positive and the speaker should be profound.
+        3. make sure the video does not contain any pornographic content.
+    `
 };
 
-export const getTeachingPrompt = (style: TeachingStyle): string => {
-    return (TEACHING_PROMPTS[style] || TEACHING_PROMPTS["short"]).trim();
+
+export const getTeachingPrompt = (inputData: string, style: TeachingStyle): string => {
+    return `${TEACHING_PROMPTS[style] || TEACHING_PROMPTS["short"]}\n\nTopic: ${inputData}`.trim();
 };
