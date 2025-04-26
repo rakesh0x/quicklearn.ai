@@ -3,7 +3,7 @@
 import { Children, useState } from "react";
 import { SendHorizontal, Loader2, BookOpen, Youtube, Sparkles, ChevronDown, ChevronUp, Check, X } from "lucide-react";
 import axios, { AxiosError } from "axios";
-import { getTeachingPrompt, TeachingStyle } from '@/components/GeminiResponse/SystemPrompt'
+import { getTeachingPrompt, TeachingStyle } from '@/components/GeminiResponse/SystemPrompt';
 import { Skeleton } from "@/components/ui/skeleton";
 import { GeminiResponse } from "./interfaces/types";
 import { YoutubeAnalyticsResponse } from "./interfaces/types";
