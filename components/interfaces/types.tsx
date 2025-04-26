@@ -15,6 +15,7 @@ export interface YoutubeVideoItem {
     };
     snippet: {
       title: string;
+      publishedAt: string;
       thumbnails: {
         default: {
           url: string;
